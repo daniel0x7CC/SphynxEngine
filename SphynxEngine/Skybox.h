@@ -25,5 +25,6 @@ private:
 	Shader* skyBoxShader;
 	GLuint textureID;
 	GLuint uniformProjection, uniformView;
+	GLuint VAO;
 };
 

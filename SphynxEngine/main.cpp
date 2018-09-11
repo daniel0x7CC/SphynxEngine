@@ -109,7 +109,7 @@ int main()
 	//	camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		// Clear the window
-		glViewport(0, 0, 1366, 768);
+		glViewport(0, 0, 800, 600);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -130,8 +130,7 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		brickTexture.useTexture();
 		meshList[0]->renderMesh();
-	
-		skybox.renderSkybox(camera.calculateViewMatrix(), projection);
+
 		//model = glm::mat4();
 		//model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
 		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
