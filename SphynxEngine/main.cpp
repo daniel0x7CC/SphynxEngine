@@ -92,26 +92,7 @@ int main()
 	skyboxFaces.push_back("textures/skybox/back.png");
 	skyboxFaces.push_back("textures/skybox/front.png");
 
-	std::vector<glm::vec4> suzanne_vertices;
-	std::vector<glm::vec3> suzanne_normals;
-	std::vector<GLushort> suzanne_elements;
-	objLoader.loadObj("models/cube.obj", suzanne_vertices, suzanne_normals, suzanne_elements);
-
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	GLuint VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(suzanne_vertices), suzanne_vertices.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
+	objLoader.loadObj("models/cube.obj");
 
 	//skybox = Skybox(skyboxFaces);
 
@@ -134,7 +115,7 @@ int main()
 		// Clear the window
 		glViewport(0, 0, 800, 600);
 
-		glClearColor(0.0f, 0.2f, 0.4f, 0.5f);
+		glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//skybox.renderSkybox(camera.calculateViewMatrix(), projection);
