@@ -13,15 +13,13 @@ public:
 	Model();
 	~Model();
 	void render(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
-	bool loadObj(const char * path,
-		std::vector<glm::vec4> &vertices,
-		std::vector<glm::vec3> &normals, std::vector<GLushort> &elements);
+	bool loadObj(const char* path);
 
 private:
 	Shader* modelShader;
 	GLuint uniformProjection, uniformView, uniformModel;
-	GLuint VAO;
+	GLuint VAO, VBO, IBO;;
 	Mesh* modelMesh;
-	std::vector<glm::vec4> modelVertices;
+	GLuint indexCount;
 };
 
