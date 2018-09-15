@@ -11,66 +11,81 @@ Model::Model()
 
 bool Model::loadObj(const char* path)
 {
-
 	modelShader = new Shader();
 	modelShader->createFromFiles("shaders/model.vs", "shaders/model.frag");
 
 	uniformProjection = modelShader->getProjectionLocation();
 	uniformView = modelShader->getViewLocation();
 
-	std::ifstream in(path, std::ios::in);
-	if (!in) { std::cerr << "Não pode abrir o arquivo: " << path << std::endl; exit(1); }
+	std::vector< unsigned int> vertexIndices, normals, uvIndices;
+	std::vector< glm::vec3> temp_vertices;
+	std::vector< glm::vec2> temp_uvs;
 
-	std::vector<glm::vec3> vertices;
-	std::vector<unsigned int> indices;
+	FILE *fp = fopen(path, "r");
 
-	std::string line;
-	while (getline(in, line)) {
-		if (line.substr(0, 2) == "v ") {
-			std::istringstream s(line.substr(2));
-			glm::vec3 v;
-			s >> v.x; s >> v.y; s >> v.z;
-			vertices.push_back(v);
-		}
-		else if (line.substr(0, 2) == "f ") {
-			GLushort a, b, c;
-
-			std::string temp = line.substr(2);
-			std::istringstream s(temp);
-			s >> a;
-			s.clear();
-
-			temp = temp.substr(4);
-			s.str(temp);
-			s >> b;
-			s.clear();
-
-			temp = temp.substr(5);
-			s.str(temp);
-			s >> c;
-			s.clear();
-
-			indices.push_back(--a);
-			indices.push_back(--b);
-			indices.push_back(--c);
-		}
-		else if (line[0] == '#') { /* ignorando esta linha */ }
-		else { /* ignoring this line */ }
+	if (fp == NULL) {
+		perror("Failed: ");
+		return false;
 	}
+	else {
+		while (true)
+		{
+			char lineHeader[128];
+
+			int res = fscanf(fp, "%s", lineHeader);
+			if (res == EOF)
+				break;
+
+			if (strcmp(lineHeader, "v") == 0)
+			{
+				glm::vec3 vertex;
+				fscanf(fp, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+				temp_vertices.push_back(vertex);
+			}
+			else if (strcmp(lineHeader, "vt") == 0)
+			{
+				glm::vec2 uv;
+				fscanf(fp, "%f %f\n", &uv.x, &uv.y);
+				temp_uvs.push_back(uv);
+			}
+			else if (strcmp(lineHeader, "f") == 0)
+			{
+				std::string vertex1, vertex2, vertex3;
+				unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+				int matches = fscanf(fp, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+				if (matches != 9) {
+					printf("File can't be read by our simple parser :-( Try exporting with other options\n");
+					return false;
+				}
+				vertexIndices.push_back(vertexIndex[0]);
+				vertexIndices.push_back(vertexIndex[1]);
+				vertexIndices.push_back(vertexIndex[2]);
+				uvIndices.push_back(uvIndex[0]);
+				uvIndices.push_back(uvIndex[1]);
+				uvIndices.push_back(uvIndex[2]);
+				normals.push_back(normalIndex[0]);
+				normals.push_back(normalIndex[1]);
+				normals.push_back(normalIndex[2]);
+
+			}
+		}
+	}
+		
+	
 	printf("file loaded successfully!");
 
-	indexCount = indices.size();
+	indexCount = vertexIndices.size();
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexIndices[0]) * temp_vertices.size(), temp_vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices[0]) * vertexIndices.size(), vertexIndices.data(), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
@@ -78,6 +93,7 @@ bool Model::loadObj(const char* path)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	return true;
 }
 
 void Model::render(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
@@ -87,7 +103,7 @@ void Model::render(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
 	glm::mat4 model;
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
+	model = glm::translate(model, glm::vec3(1.0f, 0.0f, -2.5f));
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
