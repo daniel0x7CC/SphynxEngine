@@ -33,22 +33,18 @@ bool Model::loadObj(const char* path)
 			vertices.push_back(v);
 		}
 		else if (line.substr(0, 2) == "f ") {
-			GLushort a, b, c;
+			std::istringstream s(line.substr(2));
+			GLuint a, b, c, temp_u;
+			char temp_c;
 
-			std::string temp = line.substr(2);
-			std::istringstream s(temp);
-			s >> a;
-			s.clear();
+			// v      /            vt           /            vn
+			s >> a; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
 
-			temp = temp.substr(4);
-			s.str(temp);
-			s >> b;
-			s.clear();
-
-			temp = temp.substr(5);
-			s.str(temp);
-			s >> c;
-			s.clear();
+			// v      /            vt           /            vn
+			s >> b; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
+			
+			// v      /            vt           /            vn
+			s >> c; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
 
 			indices.push_back(--a);
 			indices.push_back(--b);
