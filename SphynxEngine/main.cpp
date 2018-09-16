@@ -92,7 +92,9 @@ int main()
 	skyboxFaces.push_back("textures/skybox/back.png");
 	skyboxFaces.push_back("textures/skybox/front.png");
 
+
 	objLoader.loadObj("models/Pikachu.obj");
+
 
 	skybox = Skybox(skyboxFaces);
 

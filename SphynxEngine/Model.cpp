@@ -23,51 +23,32 @@ bool Model::loadObj(const char* path)
 
 	FILE *fp = fopen(path, "r");
 
-	if (fp == NULL) {
-		perror("Failed: ");
-		return false;
-	}
-	else {
-		while (true)
-		{
-			char lineHeader[128];
 
-			int res = fscanf(fp, "%s", lineHeader);
-			if (res == EOF)
-				break;
+	std::string line;
+	while (getline(in, line)) {
+		if (line.substr(0, 2) == "v ") {
+			std::istringstream s(line.substr(2));
+			glm::vec3 v;
+			s >> v.x; s >> v.y; s >> v.z;
+			vertices.push_back(v);
+		}
+		else if (line.substr(0, 2) == "f ") {
+			std::istringstream s(line.substr(2));
+			GLuint a, b, c, temp_u;
+			char temp_c;
 
-			if (strcmp(lineHeader, "v") == 0)
-			{
-				glm::vec3 vertex;
-				fscanf(fp, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-				temp_vertices.push_back(vertex);
-			}
-			else if (strcmp(lineHeader, "vt") == 0)
-			{
-				glm::vec2 uv;
-				fscanf(fp, "%f %f\n", &uv.x, &uv.y);
-				temp_uvs.push_back(uv);
-			}
-			else if (strcmp(lineHeader, "f") == 0)
-			{
-				std::string vertex1, vertex2, vertex3;
-				unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
-				int matches = fscanf(fp, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0], &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
-				if (matches != 9) {
-					printf("File can't be read by our simple parser :-( Try exporting with other options\n");
-					return false;
-				}
-				vertexIndices.push_back(vertexIndex[0]);
-				vertexIndices.push_back(vertexIndex[1]);
-				vertexIndices.push_back(vertexIndex[2]);
-				uvIndices.push_back(uvIndex[0]);
-				uvIndices.push_back(uvIndex[1]);
-				uvIndices.push_back(uvIndex[2]);
-				normals.push_back(normalIndex[0]);
-				normals.push_back(normalIndex[1]);
-				normals.push_back(normalIndex[2]);
+			// v      /            vt           /            vn
+			s >> a; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
 
-			}
+			// v      /            vt           /            vn
+			s >> b; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
+			
+			// v      /            vt           /            vn
+			s >> c; s >> temp_c; s >> temp_u; s >> temp_c; s >> temp_u;
+
+			indices.push_back(--a);
+			indices.push_back(--b);
+			indices.push_back(--c);
 		}
 	}
 		
