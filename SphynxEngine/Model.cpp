@@ -2,27 +2,22 @@
 
 Model::Model()
 {
-	/*modelShader = new Shader();
-	modelShader->createFromFiles("shaders/model.vs", "shaders/model.frag");
-
-	uniformProjection = modelShader->getProjectionLocation();
-	uniformView = modelShader->getViewLocation();*/
 }
 
 bool Model::loadObj(const char* path)
 {
+
 	modelShader = new Shader();
 	modelShader->createFromFiles("shaders/model.vs", "shaders/model.frag");
 
 	uniformProjection = modelShader->getProjectionLocation();
 	uniformView = modelShader->getViewLocation();
 
-	std::vector< unsigned int> vertexIndices, normals, uvIndices;
-	std::vector< glm::vec3> temp_vertices;
-	std::vector< glm::vec2> temp_uvs;
+	std::ifstream in(path, std::ios::in);
+	if (!in) { std::cerr << "Não pode abrir o arquivo: " << path << std::endl; exit(1); }
 
-	FILE *fp = fopen(path, "r");
-
+	std::vector<glm::vec3> vertices;
+	std::vector<unsigned int> indices;
 
 	std::string line;
 	while (getline(in, line)) {
@@ -50,23 +45,23 @@ bool Model::loadObj(const char* path)
 			indices.push_back(--b);
 			indices.push_back(--c);
 		}
+		else if (line[0] == '#') { /* ignorando esta linha */ }
+		else { /* ignoring this line */ }
 	}
-		
-	
 	printf("file loaded successfully!");
 
-	indexCount = vertexIndices.size();
+	indexCount = indices.size();
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexIndices[0]) * temp_vertices.size(), temp_vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertexIndices[0]) * vertexIndices.size(), vertexIndices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
@@ -74,7 +69,6 @@ bool Model::loadObj(const char* path)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	return true;
 }
 
 void Model::render(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
@@ -84,7 +78,7 @@ void Model::render(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
 	glm::mat4 model;
-	model = glm::translate(model, glm::vec3(1.0f, 0.0f, -2.5f));
+	model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));
 	model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
