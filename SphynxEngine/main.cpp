@@ -31,7 +31,7 @@ Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 Texture brickTexture;
-Skybox skybox;
+//Skybox skybox;
 Model objLoader;
 
 // Vertex Shader
@@ -92,11 +92,9 @@ int main()
 	skyboxFaces.push_back("textures/skybox/back.png");
 	skyboxFaces.push_back("textures/skybox/front.png");
 
+	objLoader.loadObj("models/pikachu.obj");
 
-	objLoader.loadObj("models/Pikachu.obj");
-
-
-	skybox = Skybox(skyboxFaces);
+	//skybox = Skybox(skyboxFaces);
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat) mainWindow.getBufferWidth() / (GLfloat) mainWindow.getBufferHeight(), 0.1f, 100.0f);
@@ -120,7 +118,7 @@ int main()
 		glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		skybox.renderSkybox(camera.calculateViewMatrix(), projection);
+		//skybox.renderSkybox(camera.calculateViewMatrix(), projection);
 		objLoader.render(camera.calculateViewMatrix(), projection);
 
 		shaderList[0].useShader();
@@ -136,7 +134,7 @@ int main()
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		brickTexture.useTexture();
-		meshList[0]->renderMesh();
+		//meshList[0]->renderMesh();
 
 		//model = glm::mat4();
 		//model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
