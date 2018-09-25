@@ -20,6 +20,12 @@ public:
 	GLuint getProjectionLocation();
 	GLuint getModelLocation();
 	GLuint getViewLocation();
+	GLuint getVertexLocation();
+	GLuint getHeightMapTextureLocation();
+	GLuint getScaleLocation();
+	GLuint getHalfScaleLocation();
+	GLuint getHalfTerrainSizeLocation();
+	GLuint getMVPLocation();
 
 	void useShader();
 	void clearShader();
@@ -28,6 +34,9 @@ public:
 
 private:
 	GLuint shaderID, uniformProjection, uniformModel, uniformView;
+	GLuint vVertex, heightMapTexture,
+		scale, half_scale, HALF_TERRAIN_SIZE,
+		MVP;
 
 	void compileShader(const char* vertexCode, const char* fragmentCode);
 	void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);

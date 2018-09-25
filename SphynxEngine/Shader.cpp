@@ -80,6 +80,13 @@ void Shader::compileShader(const char* vertexCode, const char* fragmentCode)
 	uniformProjection = glGetUniformLocation(shaderID, "projection");
 	uniformModel = glGetUniformLocation(shaderID, "model");
 	uniformView = glGetUniformLocation(shaderID, "view");
+	// uniforms for terrain loading
+	vVertex = glGetUniformLocation(shaderID, "vVertex");
+	heightMapTexture = glGetUniformLocation(shaderID, "vVertex");
+	scale = glGetUniformLocation(shaderID, "vVertex");
+	half_scale = glGetUniformLocation(shaderID, "half_scale");
+	HALF_TERRAIN_SIZE = glGetUniformLocation(shaderID, "HALF_TERRAIN_SIZE");
+	MVP = glGetUniformLocation(shaderID, "MVP");
 }
 
 GLuint Shader::getProjectionLocation()
@@ -93,6 +100,30 @@ GLuint Shader::getModelLocation()
 GLuint Shader::getViewLocation()
 {
 	return uniformView;
+}
+GLuint Shader::getVertexLocation()
+{
+	return vVertex;
+}
+GLuint Shader::getHeightMapTextureLocation()
+{
+	return heightMapTexture;
+}
+GLuint Shader::getScaleLocation()
+{
+	return scale;
+}
+GLuint Shader::getHalfScaleLocation()
+{
+	return half_scale;
+}
+GLuint Shader::getHalfTerrainSizeLocation()
+{
+	return HALF_TERRAIN_SIZE;
+}
+GLuint Shader::getMVPLocation()
+{
+	return MVP;
 }
 
 void Shader::useShader()

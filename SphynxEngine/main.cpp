@@ -1,6 +1,3 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "CommonValues.h"
-
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
@@ -21,6 +18,7 @@
 #include "Texture.h"
 #include "Skybox.h"
 #include "Model.h"
+#include "Terrain.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -30,9 +28,10 @@ std::vector<Shader> shaderList;
 Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-Texture brickTexture;
-//Skybox skybox;
+Texture brickTexture, pikachuTexture;
+Skybox skybox;
 Model objLoader;
+Terrain terrain;
 
 // Vertex Shader
 static const char* vShader = "core.vs";
@@ -84,6 +83,9 @@ int main()
 	brickTexture = Texture("textures/dirt.png");
 	brickTexture.loadTexture();
 
+	pikachuTexture = Texture("models/pikachu/PikachuNl.tga");
+	pikachuTexture.loadTexture();
+
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("textures/skybox/right.png");
 	skyboxFaces.push_back("textures/skybox/left.png");
@@ -92,9 +94,10 @@ int main()
 	skyboxFaces.push_back("textures/skybox/back.png");
 	skyboxFaces.push_back("textures/skybox/front.png");
 
-	objLoader.loadObj("models/pikachu.obj");
+	objLoader.loadObj("models/mew/Mew.obj");
 
-	//skybox = Skybox(skyboxFaces);
+	skybox = Skybox(skyboxFaces);
+	terrain = Terrain("heightmaps/sample.png");
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat) mainWindow.getBufferWidth() / (GLfloat) mainWindow.getBufferHeight(), 0.1f, 100.0f);
@@ -118,7 +121,9 @@ int main()
 		glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//skybox.renderSkybox(camera.calculateViewMatrix(), projection);
+		skybox.renderSkybox(camera.calculateViewMatrix(), projection);
+
+		pikachuTexture.useTexture();
 		objLoader.render(camera.calculateViewMatrix(), projection);
 
 		shaderList[0].useShader();
@@ -134,7 +139,9 @@ int main()
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		brickTexture.useTexture();
-		//meshList[0]->renderMesh();
+		meshList[0]->renderMesh();
+
+		terrain.renderFromHeightmap(camera.calculateViewMatrix(), projection);
 
 		//model = glm::mat4();
 		//model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));
