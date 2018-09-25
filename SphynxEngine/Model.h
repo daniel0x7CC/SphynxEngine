@@ -18,7 +18,7 @@ public:
 private:
 	Shader* modelShader;
 	GLuint uniformProjection, uniformView, uniformModel;
-	GLuint VAO, VBO, IBO;;
+	GLuint VAO, VBO, IBO;
 	Mesh* modelMesh;
 	GLuint indexCount;
 };
