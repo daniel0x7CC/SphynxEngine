@@ -23,7 +23,6 @@ private:
 	//IDs for vertex array and buffer object
 	GLuint vaoID;
 	GLuint vboID;
-	GLuint iboID;
 	//heightmap texture dimensions and half dimensions
 	 const static int TERRAIN_WIDTH = 128;
 	 const static int TERRAIN_DEPTH = 128;
@@ -41,7 +40,6 @@ private:
 	glm::mat4  P = glm::mat4(1);
 	glm::mat4 MV = glm::mat4(1);
 
-	std::vector<unsigned int> indices;
-
+	std::uint32_t vertexCount = 0;
 };
 

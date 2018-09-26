@@ -28,7 +28,7 @@ std::vector<Shader> shaderList;
 Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-Texture brickTexture, pikachuTexture;
+Texture brickTexture;
 Skybox skybox;
 Model objLoader;
 Terrain terrain;
@@ -83,9 +83,6 @@ int main()
 	brickTexture = Texture("textures/dirt.png");
 	brickTexture.loadTexture();
 
-	pikachuTexture = Texture("models/pikachu/PikachuNl.tga");
-	pikachuTexture.loadTexture();
-
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("textures/skybox/right.png");
 	skyboxFaces.push_back("textures/skybox/left.png");
@@ -94,7 +91,7 @@ int main()
 	skyboxFaces.push_back("textures/skybox/back.png");
 	skyboxFaces.push_back("textures/skybox/front.png");
 
-	objLoader.loadObj("models/mew/Mew.obj");
+	objLoader.loadObj("models/pikachu.obj");
 
 	skybox = Skybox(skyboxFaces);
 	terrain = Terrain("heightmaps/sample.png");
@@ -105,7 +102,7 @@ int main()
 	// Loop until window closed
 	while (!mainWindow.getShouldClose())
 	{
-		GLfloat now = glfwGetTime(); 
+		double now = glfwGetTime(); 
 		deltaTime = now - lastTime;
 		lastTime = now;
 
@@ -123,7 +120,6 @@ int main()
 
 		skybox.renderSkybox(camera.calculateViewMatrix(), projection);
 
-		pikachuTexture.useTexture();
 		objLoader.render(camera.calculateViewMatrix(), projection);
 
 		shaderList[0].useShader();
