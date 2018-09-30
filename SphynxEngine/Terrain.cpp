@@ -1,5 +1,8 @@
 #include "Terrain.h"
 
+// Structure that holds the heightmap data.
+struct HeightmapData { float x, y, z; } *g_Heightmap;
+
 Terrain::Terrain() {
 
 }
@@ -20,70 +23,75 @@ Terrain::Terrain(const char* fileName)
 	printf("width: %d", texture_width);
 	printf("height: %d", texture_height);
 
-	vertexCount = texture_width * texture_height * 8;
+	// Create the array to hold the heightmap data.
+	g_Heightmap = new HeightmapData[texture_width * texture_height];
 
+	// Read the image data.
+	std::uint32_t index = 0;
+	for (int i = 0; i < texture_width; ++i)
+	{
+		for (int j = 0; j < texture_height; ++j)
+		{
+			index = (texture_width * i) + j;
+			g_Heightmap[index].x = (float)i * 16.0f;
+			g_Heightmap[index].y = pData[index] * 1.25f;
+			g_Heightmap[index].z = (float)j * 16.0f;
+		}
+	}
+
+	vertexCount = texture_width * texture_height * 6;
 	std::vector<glm::vec3> vertx(vertexCount);
 
-	std::uint32_t index = 0, offset = 0;
-	float positionX, positionZ;
-	for (int x = 0; x < (texture_width - 1); ++x)
+	// Reset the index.
+	index = 0;
+
+	// Build terrain model.
+	int index1, index2, index3, index4;
+	for (int i = 0; i < (texture_width - 1); ++i)
 	{
-		for (int z = 0; z < (texture_height - 1); ++z)
+		for (int j = 0; j < (texture_height - 1); ++j)
 		{
-			offset = (x * texture_width) + (z + 1);
-			positionX = (float)x;
-			positionZ = (float)(z + 1);
+			// Get the indexes to the four points of the quad.
+			index1 = (texture_width * j) + i;				// Upper left.
+			index2 = (texture_width * j) + (i + 1);			// Upper right.
+			index3 = (texture_width * (j + 1)) + i;			// Bottom left.
+			index4 = (texture_width * (j + 1)) + (i + 1);	// Bottom right.
 
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Create two triangles for the quad.
+			// Triangle 1 - Upper left.
+			vertx[index].x = g_Heightmap[index1].x;
+			vertx[index].y = g_Heightmap[index1].y;
+			vertx[index].z = g_Heightmap[index1].z;
 			index++;
 
-			offset = ((x + 1) * texture_width) + (z + 1);
-			positionX = (float)(x + 1);
-			positionZ = (float)(z + 1);
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Triangle 1 - Upper right.
+			vertx[index].x = g_Heightmap[index2].x;
+			vertx[index].y = g_Heightmap[index2].y;
+			vertx[index].z = g_Heightmap[index2].z;
 			index++;
 
-			offset = ((x + 1) * texture_width) + (z + 1);
-			positionX = (float)(x + 1);
-			positionZ = (float)(z + 1);
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Triangle 1 - Bottom left.
+			vertx[index].x = g_Heightmap[index3].x;
+			vertx[index].y = g_Heightmap[index3].y;
+			vertx[index].z = g_Heightmap[index3].z;
 			index++;
 
-			offset = ((x + 1) * texture_width) + z;
-			positionX = (float)(x + 1);
-			positionZ = (float)z;
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Triangle 2 - Bottom left.
+			vertx[index].x = g_Heightmap[index3].x;
+			vertx[index].y = g_Heightmap[index3].y;
+			vertx[index].z = g_Heightmap[index3].z;
 			index++;
 
-			offset = ((x + 1) * texture_width) + z;
-			positionX = (float)(x + 1);
-			positionZ = (float)z;
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Triangle 2 - Upper right.
+			vertx[index].x = g_Heightmap[index2].x;
+			vertx[index].y = g_Heightmap[index2].y;
+			vertx[index].z = g_Heightmap[index2].z;
 			index++;
 
-			offset = (x * texture_width) + z;
-			positionX = (float)x;
-			positionZ = (float)z;
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
-			index++;
-
-			offset = (x * texture_width) + z;
-			positionX = (float)x;
-			positionZ = (float)z;
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
-			index++;
-
-			offset = (x * texture_width) + (z + 1);
-			positionX = (float)x;
-			positionZ = (float)(z + 1);
-
-			vertx[index] = glm::vec3(positionX * 16.0f, pData[offset] * 1.25f, positionZ * 16.0f);
+			// Triangle 2 - Bottom right.
+			vertx[index].x = g_Heightmap[index4].x;
+			vertx[index].y = g_Heightmap[index4].y;
+			vertx[index].z = g_Heightmap[index4].z;
 			index++;
 		}
 	}
@@ -122,7 +130,7 @@ void Terrain::renderFromHeightmap(glm::mat4 viewMatrix, glm::mat4 projectionMatr
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glBindVertexArray(vaoID);
-	glDrawArrays(GL_LINES, 0, vertexCount);
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 	glBindVertexArray(0);
 
 	// set polygon mode to fill again
@@ -131,5 +139,9 @@ void Terrain::renderFromHeightmap(glm::mat4 viewMatrix, glm::mat4 projectionMatr
 
 Terrain::~Terrain()
 {
-
+	if (g_Heightmap)
+	{
+		delete[] g_Heightmap;
+		g_Heightmap = 0;
+	}
 }
