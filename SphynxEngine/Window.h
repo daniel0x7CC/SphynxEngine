@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
+#include <string>
 class Window
 {
 public:
@@ -23,7 +24,7 @@ public:
 
 	GLfloat getXChange();
 	GLfloat getYChange();
-
+	void setTitle(int fps);
 	void swapBuffers() { glfwSwapBuffers(mainWindow); }
 
 	~Window();
@@ -41,7 +42,6 @@ private:
 	GLfloat xChange;
 	GLfloat yChange;
 	bool mouseFirstMoved;
-
 	static void handleKeys(GLFWwindow* window, int key, int code, int action, int mode);
 	static void handleMouse(GLFWwindow* window, double xPos, double yPos);
 };

@@ -18,7 +18,7 @@ class Skybox
 public:
 	Skybox();
 	Skybox(std::vector<std::string> faceLocations);
-	void renderSkybox(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
+	void renderSkybox(GLfloat deltaTime, glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 	~Skybox();
 private:
 	Mesh* skyBoxMesh;
@@ -26,5 +26,7 @@ private:
 	GLuint textureID;
 	GLuint uniformProjection, uniformView;
 	GLuint VAO;
+	GLfloat ROTATE_SPEED = 1.0f;
+	GLfloat rotation = 0.0f;
 };
 

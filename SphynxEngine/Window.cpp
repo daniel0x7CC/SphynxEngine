@@ -42,6 +42,7 @@ int Window::initialize()
 
 	// Create the window
 	mainWindow = glfwCreateWindow(width, height, "Sphynx Engine v0.1", NULL, NULL);
+	
 	if (!mainWindow)
 	{
 		printf("Error creating GLFW window!");
@@ -136,7 +137,20 @@ void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 	theWindow->lastX = xPos;
 	theWindow->lastY = yPos;
 
-	printf("x: %.6f, y:%.6f\n", theWindow->xChange, theWindow->yChange);
+//	printf("x: %.6f, y:%.6f\n", theWindow->xChange, theWindow->yChange);
+}
+
+void Window::setTitle(int fps)
+{
+	char integer_string[32];
+
+	sprintf(integer_string, "%d", fps);
+
+	char other_string[64] = "Sphynx Engine v0.1 | FPS : "; // make sure you allocate enough space to append the other string
+
+	strcat(other_string, integer_string);
+
+	glfwSetWindowTitle(mainWindow, other_string);
 }
 
 Window::~Window()

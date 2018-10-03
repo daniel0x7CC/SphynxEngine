@@ -101,9 +101,12 @@ Skybox::Skybox(std::vector<std::string> faceLocations)
 	glBindVertexArray(0);
 }
 
-void Skybox::renderSkybox(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
+void Skybox::renderSkybox(GLfloat deltaTime, glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
-	viewMatrix = glm::mat4(glm::mat3(viewMatrix));
+	 rotation += ROTATE_SPEED * deltaTime / 10.0f;
+
+	 viewMatrix = glm::mat4(glm::mat3(viewMatrix));
+	 viewMatrix = glm::rotate(viewMatrix, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	glDepthMask(GL_FALSE);
 

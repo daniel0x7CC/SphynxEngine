@@ -19,7 +19,7 @@ Camera::Camera(glm::vec3 initialPosition, glm::vec3 initialUp, GLfloat initialYa
 
 void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
-	GLfloat velocity = moveSpeed * deltaTime;
+	GLfloat velocity = 5.0f * deltaTime;
 
 	if (keys[GLFW_KEY_W]) {
 		position += front * velocity;

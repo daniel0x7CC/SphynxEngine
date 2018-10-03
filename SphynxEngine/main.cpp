@@ -19,6 +19,7 @@
 #include "Skybox.h"
 #include "Model.h"
 #include "Terrain.h"
+#include "TerrainTexture.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -28,10 +29,13 @@ std::vector<Shader> shaderList;
 Camera camera;
 GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
-Texture brickTexture;
+Texture brickTexture, grassTexture;
 Skybox skybox;
 Model objLoader;
 Terrain terrain;
+TerrainTexture terrainTexture;
+int frameCount = 0;
+
 
 // Vertex Shader
 static const char* vShader = "core.vs";
@@ -74,27 +78,34 @@ void CreateShaders()
 
 int main()
 {
-	mainWindow = Window(800, 600);
+	mainWindow = Window(1280, 800);
 	mainWindow.initialize();
-	
+
+	terrain = Terrain("heightmaps/sample.png");
+
 	CreateObjects();
 	CreateShaders();
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 5.0f);
 	brickTexture = Texture("textures/dirt.png");
 	brickTexture.loadTexture();
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("textures/skybox/right.png");
-	skyboxFaces.push_back("textures/skybox/left.png");
-	skyboxFaces.push_back("textures/skybox/up.png");
-	skyboxFaces.push_back("textures/skybox/down.png");
-	skyboxFaces.push_back("textures/skybox/back.png");
-	skyboxFaces.push_back("textures/skybox/front.png");
+//	grassTexture = Texture("textures/grass.png");
+//	grassTexture.loadTexture();
 
-	objLoader.loadObj("models/pikachu.obj");
+	terrainTexture = TerrainTexture("textures/dirt.png", "textures/path.png", "textures/mud.png", "textures/grass.png", "heightmaps/blendmap.png");
+	terrainTexture.loadTextures();
+
+	std::vector<std::string> skyboxFaces;
+	skyboxFaces.push_back("textures/skybox_03/right.png");
+	skyboxFaces.push_back("textures/skybox_03/left.png");
+	skyboxFaces.push_back("textures/skybox_03/top.png");
+	skyboxFaces.push_back("textures/skybox_03/bottom.png");
+	skyboxFaces.push_back("textures/skybox_03/back.png");
+	skyboxFaces.push_back("textures/skybox_03/front.png");
+
+	objLoader.loadObj("models/pikachu/Pikachu.obj");
 
 	skybox = Skybox(skyboxFaces);
-	terrain = Terrain("heightmaps/sample.png");
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat) mainWindow.getBufferWidth() / (GLfloat) mainWindow.getBufferHeight(), 0.1f, 100.0f);
@@ -104,21 +115,29 @@ int main()
 	{
 		double now = glfwGetTime(); 
 		deltaTime = now - lastTime;
-		lastTime = now;
+		
+		frameCount++;
+
+		if (deltaTime >= 1.0) {
+			mainWindow.setTitle(frameCount);
+			printf("fps count: %d", frameCount);
+			frameCount = 0;
+			lastTime = now;
+		}
 
 		// Get + Handle User Input
 		glfwPollEvents();
 
 		camera.keyControl(mainWindow.getKeys(), deltaTime);
-	//	camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		//camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 		// Clear the window
-		glViewport(0, 0, 800, 600);
+		glViewport(0, 0, 1280, 800);
 
 		glClearColor(0.0f, 0.2f, 0.4f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		skybox.renderSkybox(camera.calculateViewMatrix(), projection);
+		skybox.renderSkybox(deltaTime, camera.calculateViewMatrix(), projection);
 
 		objLoader.render(camera.calculateViewMatrix(), projection);
 
@@ -134,9 +153,12 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+
 		brickTexture.useTexture();
 		meshList[0]->renderMesh();
 
+		//grassTexture.useTexture();
+		terrainTexture.bindTextures();
 		terrain.renderFromHeightmap(camera.calculateViewMatrix(), projection);
 
 		//model = glm::mat4();

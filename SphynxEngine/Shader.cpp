@@ -83,10 +83,24 @@ void Shader::compileShader(const char* vertexCode, const char* fragmentCode)
 	// uniforms for terrain loading
 	vVertex = glGetUniformLocation(shaderID, "vVertex");
 	heightMapTexture = glGetUniformLocation(shaderID, "vVertex");
-	scale = glGetUniformLocation(shaderID, "vVertex");
-	half_scale = glGetUniformLocation(shaderID, "half_scale");
-	HALF_TERRAIN_SIZE = glGetUniformLocation(shaderID, "HALF_TERRAIN_SIZE");
+
 	MVP = glGetUniformLocation(shaderID, "MVP");
+
+	bgTextureLocation = glGetUniformLocation(shaderID, "mTexture");
+	rTextureLocation = glGetUniformLocation(shaderID, "rTexture");
+	gTextureLocation = glGetUniformLocation(shaderID, "gTexture");
+	bTextureLocation = glGetUniformLocation(shaderID, "bTexture");
+	blendMapLocation = glGetUniformLocation(shaderID, "blendMap");
+}
+
+GLuint Shader::getBackgroundTextureLocation()
+{
+	return bgTextureLocation;
+}
+
+GLuint Shader::getBlendMapLocation()
+{
+	return blendMapLocation;
 }
 
 GLuint Shader::getProjectionLocation()
@@ -109,17 +123,17 @@ GLuint Shader::getHeightMapTextureLocation()
 {
 	return heightMapTexture;
 }
-GLuint Shader::getScaleLocation()
+GLuint Shader::getRTextureLocation()
 {
-	return scale;
+	return rTextureLocation;
 }
-GLuint Shader::getHalfScaleLocation()
+GLuint Shader::getGTextureLocation()
 {
-	return half_scale;
+	return gTextureLocation;
 }
-GLuint Shader::getHalfTerrainSizeLocation()
+GLuint Shader::getBTextureLocation()
 {
-	return HALF_TERRAIN_SIZE;
+	return bTextureLocation;
 }
 GLuint Shader::getMVPLocation()
 {
