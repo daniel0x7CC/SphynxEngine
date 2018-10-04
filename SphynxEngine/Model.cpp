@@ -6,7 +6,6 @@ Model::Model()
 
 bool Model::loadObj(const char* path)
 {
-
 	modelShader = new Shader();
 	modelShader->createFromFiles("shaders/model.vs", "shaders/model.frag");
 

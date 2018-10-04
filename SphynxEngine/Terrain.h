@@ -16,10 +16,10 @@ public:
 	~Terrain();
 	void renderFromHeightmap(glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
 private:
-	GLuint uniformProjection, uniformView, uniformModel;
+	GLuint uniformProjection, uniformView, uniformModel, textureLocation;
 	Shader* terrainShader;
 	//heighmap texture ID
-	GLuint heightMapTextureID;
+	GLuint heightMapTextureID, textureID;
 	//IDs for vertex array and buffer object
 	GLuint vaoID;
 	GLuint vboID;
@@ -39,7 +39,7 @@ private:
 	//projection and modelview matrices
 	glm::mat4  P = glm::mat4(1);
 	glm::mat4 MV = glm::mat4(1);
-
+	GLuint rTextureLocation, gTextureLocation, bTextureLocation, blendMapLocation, bgTextureLocation;
 	std::uint32_t vertexCount = 0;
 };
 
