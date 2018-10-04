@@ -141,7 +141,7 @@ Terrain::Terrain(const char* fileName)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) 0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)sizeof(glm::vec3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) sizeof(glm::vec3));
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -161,7 +161,7 @@ void Terrain::renderFromHeightmap(glm::mat4 viewMatrix, glm::mat4 projectionMatr
 	glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
 	glm::mat4 model;
-	model = glm::translate(model, glm::vec3(0.0f, -2.0f, -4.0f));
+	model = glm::translate(model, glm::vec3(0.0f, -5.0f, -4.0f));
 	model = glm::scale(model, glm::vec3(0.01f, 0.01f, 0.01f));
 	glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 

@@ -91,6 +91,27 @@ void Shader::compileShader(const char* vertexCode, const char* fragmentCode)
 	gTextureLocation = glGetUniformLocation(shaderID, "gTexture");
 	bTextureLocation = glGetUniformLocation(shaderID, "bTexture");
 	blendMapLocation = glGetUniformLocation(shaderID, "blendMap");
+
+	skyBoxLocation = glGetUniformLocation(shaderID, "skybox");
+
+	skyBox2Location = glGetUniformLocation(shaderID, "skyboxNight");
+
+	blendFactorLocation = glGetUniformLocation(shaderID, "blendFactor");
+}
+
+GLuint Shader::getSkyBoxLocation()
+{
+	return skyBoxLocation;
+}
+
+GLuint Shader::getSkyBox2Location()
+{
+	return skyBox2Location;
+}
+
+GLuint Shader::getBlendFactorLocation()
+{
+	return blendFactorLocation;
 }
 
 GLuint Shader::getBackgroundTextureLocation()

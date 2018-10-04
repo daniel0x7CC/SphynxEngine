@@ -81,7 +81,7 @@ int main()
 	mainWindow = Window(1280, 800);
 	mainWindow.initialize();
 
-	terrain = Terrain("heightmaps/sample.png");
+	terrain = Terrain("heightmaps/sample2.png");
 
 	CreateObjects();
 	CreateShaders();
@@ -95,17 +95,26 @@ int main()
 	terrainTexture = TerrainTexture("textures/dirt.png", "textures/path.png", "textures/mud.png", "textures/grass.png", "heightmaps/blendmap.png");
 	terrainTexture.loadTextures();
 
-	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("textures/skybox_03/right.png");
-	skyboxFaces.push_back("textures/skybox_03/left.png");
-	skyboxFaces.push_back("textures/skybox_03/top.png");
-	skyboxFaces.push_back("textures/skybox_03/bottom.png");
-	skyboxFaces.push_back("textures/skybox_03/back.png");
-	skyboxFaces.push_back("textures/skybox_03/front.png");
-
 	objLoader.loadObj("models/pikachu/Pikachu.obj");
 
+	std::vector<std::string> skyboxFaces;
+	skyboxFaces.push_back("textures/skybox_02/right.png");
+	skyboxFaces.push_back("textures/skybox_02/left.png");
+	skyboxFaces.push_back("textures/skybox_02/top.png");
+	skyboxFaces.push_back("textures/skybox_02/bottom.png");
+	skyboxFaces.push_back("textures/skybox_02/back.png");
+	skyboxFaces.push_back("textures/skybox_02/front.png");
+
+	std::vector<std::string> skyboxNightFaces;
+	skyboxNightFaces.push_back("textures/night/right.png");
+	skyboxNightFaces.push_back("textures/night/left.png");
+	skyboxNightFaces.push_back("textures/night/top.png");
+	skyboxNightFaces.push_back("textures/night/bottom.png");
+	skyboxNightFaces.push_back("textures/night/back.png");
+	skyboxNightFaces.push_back("textures/night/front.png");
+
 	skybox = Skybox(skyboxFaces);
+	skybox.loadNightFaces(skyboxNightFaces);
 
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat) mainWindow.getBufferWidth() / (GLfloat) mainWindow.getBufferHeight(), 0.1f, 100.0f);
