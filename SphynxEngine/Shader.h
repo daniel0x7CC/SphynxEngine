@@ -28,6 +28,9 @@ public:
 	GLuint getMVPLocation();
 	GLuint getBlendMapLocation();
 	GLuint getBackgroundTextureLocation();
+	GLuint getSkyBoxLocation();
+	GLuint getSkyBox2Location();
+	GLuint getBlendFactorLocation();
 
 	void useShader();
 	void clearShader();
@@ -35,7 +38,8 @@ public:
 	~Shader();
 
 private:
-	GLuint shaderID, uniformProjection, uniformModel, uniformView, blendMapLocation, bgTextureLocation;
+	GLuint shaderID, uniformProjection, uniformModel, uniformView, blendMapLocation, bgTextureLocation, skyBoxLocation, skyBox2Location
+		, blendFactorLocation;
 	GLuint vVertex, heightMapTexture,
 		MVP;
 	GLuint rTextureLocation, gTextureLocation, bTextureLocation;

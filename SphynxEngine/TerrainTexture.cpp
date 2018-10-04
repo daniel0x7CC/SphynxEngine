@@ -48,8 +48,6 @@ void TerrainTexture::loadTextures()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-
 	SOIL_free_image_data(textureData);
 
 	width = 0;
@@ -71,8 +69,6 @@ void TerrainTexture::loadTextures()
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData1);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	SOIL_free_image_data(textureData1);
 
@@ -96,8 +92,6 @@ void TerrainTexture::loadTextures()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData2);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-
 	SOIL_free_image_data(textureData2);
 
 	width = 0;
@@ -119,8 +113,6 @@ void TerrainTexture::loadTextures()
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData3);
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 	SOIL_free_image_data(textureData3);
 

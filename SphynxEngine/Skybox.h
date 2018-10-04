@@ -19,12 +19,13 @@ public:
 	Skybox();
 	Skybox(std::vector<std::string> faceLocations);
 	void renderSkybox(GLfloat deltaTime, glm::mat4 viewMatrix, glm::mat4 projectionMatrix);
+	void loadNightFaces(std::vector<std::string> nightFaceLocations);
 	~Skybox();
 private:
 	Mesh* skyBoxMesh;
 	Shader* skyBoxShader;
-	GLuint textureID;
-	GLuint uniformProjection, uniformView;
+	GLuint textureID, textureNightID;
+	GLuint uniformProjection, uniformView, skyBoxDay, skyBoxNight, blendFactor;
 	GLuint VAO;
 	GLfloat ROTATE_SPEED = 1.0f;
 	GLfloat rotation = 0.0f;
