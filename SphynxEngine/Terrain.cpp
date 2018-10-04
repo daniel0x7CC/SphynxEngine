@@ -183,6 +183,4 @@ Terrain::~Terrain()
 		delete[] g_Heightmap;
 		g_Heightmap = 0;
 	}
-
-	
 }

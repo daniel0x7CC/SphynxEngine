@@ -76,11 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/../resources/GLEW/include/;C:\Users\Dani\source\repos\resources\GLFW\include;C:\Users\Dani\source\repos\resources\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)resources/GLEW/include/;$(SolutionDir)resources/GLFW\include;$(SolutionDir)resources/glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)/../resources/GLEW/lib/Release/Win32;C:\Users\Dani\source\repos\resources\GLFW\lib-vc2015;C:\Users\Dani\source\repos\resources\SOIL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)resources/Libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32s.lib;glfw3.lib;soil2-debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

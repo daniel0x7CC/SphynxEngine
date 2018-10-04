@@ -60,7 +60,7 @@ void TerrainTexture::loadTextures()
 		printf("Failed to find: %s\n", fileLocation1);
 		return;
 	}
-	glGenTextures(2, &rTextureID);
+	glGenTextures(1, &rTextureID);
 	glBindTexture(GL_TEXTURE_2D, rTextureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -82,7 +82,7 @@ void TerrainTexture::loadTextures()
 		printf("Failed to find: %s\n", fileLocation2);
 		return;
 	}
-	glGenTextures(3, &gTextureID);
+	glGenTextures(1, &gTextureID);
 	glBindTexture(GL_TEXTURE_2D, gTextureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -104,7 +104,7 @@ void TerrainTexture::loadTextures()
 		printf("Failed to find: %s\n", fileLocation3);
 		return;
 	}
-	glGenTextures(4, &bTextureID);
+	glGenTextures(1, &bTextureID);
 	glBindTexture(GL_TEXTURE_2D, bTextureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -126,7 +126,7 @@ void TerrainTexture::loadTextures()
 		printf("Failed to find: %s\n", fileLocation4);
 		return;
 	}
-	glGenTextures(5, &blendMapID);
+	glGenTextures(1, &blendMapID);
 	glBindTexture(GL_TEXTURE_2D, blendMapID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -153,7 +153,6 @@ void TerrainTexture::bindTextures()
 	glActiveTexture(GL_TEXTURE5);
 	glBindTexture(GL_TEXTURE_2D, blendMapID);
 }
-
 
 TerrainTexture::~TerrainTexture()
 {
